@@ -1,13 +1,7 @@
 [
 {
-  "title": "PROCESS_V1",
-  "link": "./processus/PROCESS_V1/index.html",
-  "category": "PROCESS_V1"
-}
-,
-{
-  "title": "PROCESS_V2",
-  "link": "./processus/PROCESS_V2/index.html",
-  "category": "PROCESS_V2"
+  "title": "Process FIN SOG Test1",
+  "link": "./processus/Finance/Process_FIN_SOG_test1/index.html",
+  "category": "Finance"
 }
 ]
