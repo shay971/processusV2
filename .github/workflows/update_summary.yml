@@ -18,6 +18,17 @@ jobs:
       - name: Install unzip
         run: sudo apt-get install unzip
 
+      - name: Remove deleted processes
+        run: |
+          shopt -s nullglob
+          for dir in docs/processus/*; do
+            [ -d "$dir" ] || continue
+            name=$(basename "$dir")
+            if [ ! -f "zips/$name.zip" ]; then
+              rm -rf "$dir"
+            fi
+          done
+
       - name: Extract zip files
         run: |
           mkdir -p extracted
