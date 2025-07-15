@@ -4,4 +4,10 @@
   "link": "./processus/PROCESS_V1/index.html",
   "category": "PROCESS_V1"
 }
+,
+{
+  "title": "PROCESS_V2",
+  "link": "./processus/PROCESS_V2/index.html",
+  "category": "PROCESS_V2"
+}
 ]
