@@ -21,12 +21,17 @@ jobs:
       - name: Remove deleted processes
         run: |
           shopt -s nullglob
-          for dir in docs/processus/*; do
-            [ -d "$dir" ] || continue
-            name=$(basename "$dir")
-            if [ ! -f "zips/$name.zip" ]; then
-              rm -rf "$dir"
-            fi
+          for category in docs/processus/*; do
+            [ -d "$category" ] || continue
+            for dir in "$category"/*; do
+              [ -d "$dir" ] || continue
+              catname=$(basename "$category")
+              procname=$(basename "$dir")
+              zipname="${catname}_${procname}.zip"
+              if [ ! -f "zips/$zipname" ]; then
+                rm -rf "$dir"
+              fi
+            done
           done
 
       - name: Extract zip files
@@ -34,11 +39,13 @@ jobs:
           mkdir -p extracted
           shopt -s nullglob
           for file in zips/*.zip; do
-            name=$(basename "$file" .zip)
-            mkdir -p "docs/processus/$name"
+            base=$(basename "$file" .zip)
+            category="${base%%_*}"
+            procname="${base#*_}"
+            mkdir -p "docs/processus/$category/$procname"
             unzip -o "$file" -d "extracted"
             inner=$(unzip -Z1 "$file" | head -1 | cut -d/ -f1)
-            mv "extracted/$inner/"* "docs/processus/$name/"
+            mv "extracted/$inner/"* "docs/processus/$category/$procname/" || true
             rm -rf extracted/*
           done
 
@@ -46,17 +53,16 @@ jobs:
         run: |
           echo "[" > docs/processus.json
           first=true
-          for dir in docs/processus/*; do
-            [ -d "$dir" ] || continue
+          find docs/processus -mindepth 2 -maxdepth 2 -type d | while read dir; do
             name=$(basename "$dir")
-            title=$(echo "$name" | sed -e 's/-/ /g' -e 's/\b\(.\)/\u\1/g')
-            category=$(echo "$name" | cut -d'-' -f1)
+            category=$(basename "$(dirname "$dir")")
+            title=$(echo "$name" | sed -e 's/-/ /g' -e 's/_/ /g' -e 's/\b\(.\)/\u\1/g')
             $first || echo "," >> docs/processus.json
             first=false
             cat <<EOF >> docs/processus.json
           {
             "title": "$title",
-            "link": "./processus/$name/index.html",
+            "link": "./processus/$category/$name/index.html",
             "category": "$category"
           }
           EOF
