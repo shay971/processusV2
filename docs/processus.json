@@ -1,5 +1,11 @@
 [
 {
+  "title": "Process HR1",
+  "link": "./processus/HR/Process_HR1/index.html",
+  "category": "HR"
+}
+,
+{
   "title": "Process FIN SOG Test1",
   "link": "./processus/Finance/Process_FIN_SOG_test1/index.html",
   "category": "Finance"
