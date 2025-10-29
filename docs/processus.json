@@ -1,5 +1,11 @@
 [
 {
+  "title": "Process Test2",
+  "link": "./processus/HR/Process_test2/index.html",
+  "category": "HR"
+}
+,
+{
   "title": "Process HR1",
   "link": "./processus/HR/Process_HR1/index.html",
   "category": "HR"
