@@ -6,9 +6,21 @@
 }
 ,
 {
+  "title": "Means Process GM SOG Test1",
+  "link": "./processus/General/Means_Process_GM_SOG_test1/index.html",
+  "category": "General"
+}
+,
+{
   "title": "Process FIN SOG Test1",
   "link": "./processus/Finance/Process_FIN_SOG_test1/index.html",
   "category": "Finance"
+}
+,
+{
+  "title": "Process QUA V1 SOG",
+  "link": "./processus/Quality/Process_QUA_V1_SOG/index.html",
+  "category": "Quality"
 }
 ,
 {
