@@ -6,6 +6,12 @@
 }
 ,
 {
+  "title": "MEANS Process Test",
+  "link": "./processus/GEN/MEANS_Process_test/index.html",
+  "category": "GEN"
+}
+,
+{
   "title": "Means Process GM SOG Test1",
   "link": "./processus/General/Means_Process_GM_SOG_test1/index.html",
   "category": "General"
