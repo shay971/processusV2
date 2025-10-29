@@ -171,6 +171,12 @@
       });
     }
 
+    function filterBy(category) {
+      currentFilter = category;
+      document.getElementById('reset-filter').classList.toggle('hidden', category === 'all');
+      renderList();
+    }
+
     document.getElementById('search').addEventListener('input', e => {
       currentSearch = e.target.value;
       renderList();
