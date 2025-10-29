@@ -53,12 +53,16 @@ jobs:
         run: |
           echo "[" > docs/processus.json
           first=true
-          find docs/processus -mindepth 2 -maxdepth 2 -type d | while read dir; do
-            name=$(basename "$dir")
-            category=$(basename "$(dirname "$dir")")
-            title=$(echo "$name" | sed -e 's/-/ /g' -e 's/_/ /g' -e 's/\b\(.\)/\u\1/g')
-            $first || echo "," >> docs/processus.json
+          for dir in $(find docs/processus -mindepth 2 -maxdepth 2 -type d); do
+          name=$(basename "$dir")
+          category=$(basename "$(dirname "$dir")")
+          title=$(echo "$name" | sed -e 's/-/ /g' -e 's/_/ /g' -e 's/\b\(.\)/\u\1/g')
+          
+          if [ "$first" = true ]; then
             first=false
+          else
+            echo "," >> docs/processus.json
+          fi
             cat <<EOF >> docs/processus.json
           {
             "title": "$title",
