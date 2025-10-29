@@ -47,7 +47,7 @@
             <path stroke-linecap="round" stroke-linejoin="round" d="M16 3v4M8 3v4"/>
           </svg>
         </button>
-        <button onclick="filterBy('Qualité')" class="group" title="Qualité">
+        <button onclick="filterBy('Quality')" class="group" title="Quality">
           <svg class="w-8 h-8 text-gray-400 group-hover:text-cyan-500 transition" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <circle cx="12" cy="12" r="10"/>
             <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4"/>
@@ -124,29 +124,67 @@
     </div>
     <script>
     let processus = [];
-    let currentFilter = 'all';
+    let currentFilter = null;
     let currentSearch = '';
 
+    // Récupérer le JSON
     async function fetchProcessus() {
       try {
-        const res = await fetch('./processus.json');  // généré par GitHub Action
+        const res = await fetch('./processus.json');
         processus = await res.json();
+        renderCategories();
         renderList();
       } catch (e) {
         console.error("Erreur lors du chargement des processus:", e);
       }
     }
 
+    // Récupérer toutes les catégories dynamiquement
+    function getCategories() {
+      const cats = new Set();
+      processus.forEach(p => cats.add(p.category));
+      return Array.from(cats).sort();
+    }
+
+    // Afficher la sidebar des catégories
+    function renderCategories() {
+      const categoryList = document.getElementById('category-list');
+      categoryList.innerHTML = '';
+
+      const liAll = document.createElement('li');
+      liAll.textContent = '🏠 Tous les processus';
+      liAll.className = 'cursor-pointer hover:text-blue-600 font-semibold';
+      liAll.onclick = () => {
+        currentFilter = null;
+        renderList();
+      };
+      categoryList.appendChild(liAll);
+
+      getCategories().forEach(cat => {
+        const li = document.createElement('li');
+        li.textContent = `📁 ${cat}`;
+        li.className = 'cursor-pointer hover:text-blue-600';
+        li.onclick = () => {
+          currentFilter = cat;
+          renderList();
+        };
+        categoryList.appendChild(li);
+      });
+    }
+
+    // Afficher les processus filtrés
     function renderList() {
       const list = document.getElementById('processus-list');
       list.innerHTML = '';
+
       let filtered = processus;
 
-      if (currentFilter !== 'all') {
-        filtered = filtered.filter(p => p.category === currentFilter);
+      if (currentFilter) {
+        filtered = filtered.filter(p => p.category.trim().toLowerCase() === currentFilter.trim().toLowerCase());
       }
+
       if (currentSearch) {
-        const term = currentSearch.toLowerCase();
+        const term = currentSearch.trim().toLowerCase();
         filtered = filtered.filter(p =>
           p.title.toLowerCase().includes(term) ||
           (p.category && p.category.toLowerCase().includes(term))
@@ -154,35 +192,31 @@
       }
 
       if (filtered.length === 0) {
-        list.innerHTML = '<div class="text-gray-500 text-center py-4">Aucun processus trouvé.</div>';
+        const msg = document.createElement('div');
+        msg.className = 'text-xl text-gray-500 py-10';
+        msg.textContent = 'Aucun processus trouvé';
+        list.appendChild(msg);
         return;
       }
 
       filtered.forEach(({ title, link, category }, i) => {
         const li = document.createElement('li');
-        li.className = 'py-3';
+        li.className = 'flex items-center space-x-4 group cursor-pointer';
         li.innerHTML = `
-          <div class="flex items-center gap-4">
-            <span class="text-cyan-500 font-extrabold">→${(i+1).toString().padStart(2,'0')}</span>
-            <a href="${link}" target="_blank" class="text-blue-900 hover:underline">${title}</a>
-            <span class="ml-2 px-2 py-0.5 rounded bg-gray-100 text-xs text-gray-500">${category}</span>
-          </div>`;
+          <span class="text-blue-400 font-extrabold text-3xl min-w-[60px] text-center group-hover:text-blue-600 transition-colors">→${(i + 1).toString().padStart(2,'0')}</span>
+          <a href="${link}" target="_blank" class="text-blue-900 text-2xl font-semibold hover:underline transition">${title}</a>
+          <span class="ml-auto text-sm text-gray-400 italic">${category}</span>
+        `;
         list.appendChild(li);
       });
     }
 
-    function filterBy(category) {
-      currentFilter = category;
-      document.getElementById('reset-filter').classList.toggle('hidden', category === 'all');
-      renderList();
-    }
-
+    // Recherche
     document.getElementById('search').addEventListener('input', e => {
       currentSearch = e.target.value;
       renderList();
     });
 
-    // init
     fetchProcessus();
   </script>
 </body>
