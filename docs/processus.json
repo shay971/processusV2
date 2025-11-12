@@ -18,6 +18,12 @@
 }
 ,
 {
+  "title": "PRO MACRO",
+  "link": "./processus/Achat1/PRO_MACRO/index.html",
+  "category": "Achat1"
+}
+,
+{
   "title": "Process FIN SOG Test1",
   "link": "./processus/Finance/Process_FIN_SOG_test1/index.html",
   "category": "Finance"
@@ -27,11 +33,5 @@
   "title": "Process QUA V1 SOG",
   "link": "./processus/Quality/Process_QUA_V1_SOG/index.html",
   "category": "Quality"
-}
-,
-{
-  "title": "PROCESS V2",
-  "link": "./processus/IT/PROCESS_V2/index.html",
-  "category": "IT"
 }
 ]
