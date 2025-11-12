@@ -185,6 +185,60 @@
 
     // init - on recupère le json
     fetchProcessus();
+
+    async function loadFiles() {
+  const res = await fetch('./files.json');
+  const files = await res.json();
+
+  const totalFiles = files.diagrams.length + files.libs.length;
+  let loadedFiles = 0;
+
+  const progress = document.getElementById('progress');
+
+  function updateProgress() {
+    loadedFiles++;
+    const percent = (loadedFiles / totalFiles) * 100;
+    progress.style.width = percent + '%';
+  }
+
+  const gallery = document.getElementById('diagram-gallery');
+
+  // Charger les diagrammes SVG
+  for (const file of files.diagrams) {
+    const img = new Image();
+    img.src = `./files/diagrams/${file}`;
+    img.onload = updateProgress;
+    img.onerror = updateProgress;
+    gallery.appendChild(img);
+  }
+
+  // Charger les libs PNG (ou autres images)
+  for (const file of files.libs) {
+    if (file.endsWith('.png') || file.endsWith('.jpg') || file.endsWith('.svg')) {
+      const img = new Image();
+      img.src = `./files/libs/${file}`;
+      img.onload = updateProgress;
+      img.onerror = updateProgress;
+    }
+    // Si JS ou CSS : créer un tag <script> ou <link> et updateProgress après le load
+    if (file.endsWith('.js')) {
+      const script = document.createElement('script');
+      script.src = `./files/libs/${file}`;
+      script.onload = updateProgress;
+      document.body.appendChild(script);
+    }
+    if (file.endsWith('.css')) {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = `./files/libs/${file}`;
+      link.onload = updateProgress;
+      document.head.appendChild(link);
+    }
+  }
+}
+
+loadFiles();
+
   </script>
 </body>
 </html>
