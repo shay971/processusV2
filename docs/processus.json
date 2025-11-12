@@ -24,6 +24,12 @@
 }
 ,
 {
+  "title": "PRO MACRO",
+  "link": "./processus/SOG/PRO_MACRO/index.html",
+  "category": "SOG"
+}
+,
+{
   "title": "Process QUA V1 SOG",
   "link": "./processus/Quality/Process_QUA_V1_SOG/index.html",
   "category": "Quality"
